@@ -4,9 +4,7 @@ const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 // Gemini API key for images
 const GEMINI_API_KEY = 'AIzaSyCyfkiG3l0gW6pzj1xayEoGGk9UCUrfGW8';
 const GEMINI_IMAGE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
-// Bytez API key for embeddings
-const BYTEZ_API_KEY = '4cb461761d3ec8eca43b3bc9a5c197f0';
-const BYTEZ_BASE_URL = 'https://api.bytez.com/models';
+// Bytez removed
 // OCR Space API key
 const OCR_API_KEY = 'K83174044688957';
 const OCR_URL = 'https://api.ocr.space/parse/image';
@@ -144,23 +142,8 @@ document.getElementById('search-learn').addEventListener('click', async () => {
         return;
     }
 
-    // Use embeddings for semantic search
+    // Generate content based on query using Groq
     try {
-        const embedResponse = await fetch(`${BYTEZ_BASE_URL}/BAAI/bge-m3/run`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': API_KEY
-            },
-            body: JSON.stringify({
-                inputs: { text: query }
-            })
-        });
-        if (!embedResponse.ok) throw new Error(`HTTP ${embedResponse.status}`);
-        const embedData = await embedResponse.json();
-        const embedding = embedData.output.embedding;
-
-        // For simplicity, generate content based on query using Groq
         const contentResponse = await fetch(GROQ_URL, {
             method: 'POST',
             headers: {
