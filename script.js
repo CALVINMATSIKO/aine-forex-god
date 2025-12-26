@@ -3,7 +3,7 @@ const GROQ_API_KEY = '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';
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 // Gemini API key for images
 const GEMINI_API_KEY = 'AIzaSyCyfkiG3l0gW6pzj1xayEoGGk9UCUrfGW8';
-const GEMINI_IMAGE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict';
+const GEMINI_IMAGE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
 // Bytez API key for embeddings
 const BYTEZ_API_KEY = '4cb461761d3ec8eca43b3bc9a5c197f0';
 const BYTEZ_BASE_URL = 'https://api.bytez.com/models';
@@ -246,14 +246,16 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    prompt: {
-                        text: `Educational illustration of a Forex chart. AI-generated.`
-                    }
+                    contents: [{
+                        parts: [{
+                            text: `Generate an educational illustration of a Forex chart. Make it simple and clear.`
+                        }]
+                    }]
                 })
             });
             if (!imageResponse.ok) throw new Error(`Image HTTP ${imageResponse.status}`);
             const imageData = await imageResponse.json();
-            const imageUrl = imageData.predictions[0].bytesBase64Encoded; // Assuming base64
+            const imageUrl = imageData.candidates[0].content.parts[0].inlineData.data;
             document.getElementById('chart-result').innerHTML += `<img src="data:image/png;base64,${imageUrl}" alt="AI-generated illustration" style="max-width:100%;">`;
         } catch (imageError) {
             // Fallback no image
