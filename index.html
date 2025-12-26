@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aine – The Forex & Crypto God</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>🧠🔥 Aine – The Forex & Crypto God 🔥🧠</h1>
+        <p class="disclaimer">Aine – The Forex & Crypto God is for educational purposes only. This is not financial advice. Trading involves risk.</p>
+    </header>
+    <nav>
+        <button class="tab-button active" data-tab="chat">Chat</button>
+        <button class="tab-button" data-tab="chart">Chart Analysis</button>
+        <button class="tab-button" data-tab="tools">Tools</button>
+        <button class="tab-button" data-tab="strategy">Strategy Generator</button>
+        <button class="tab-button" data-tab="learn">Learn</button>
+    </nav>
+    <main>
+        <div id="chat" class="tab-content active">
+            <div id="chat-messages"></div>
+            <input type="text" id="chat-input" placeholder="Ask about Forex or Crypto...">
+            <button id="send-chat">Send</button>
+        </div>
+        <div id="chart" class="tab-content">
+            <label for="chart-upload" class="upload-label">📷 Upload Chart Image</label>
+            <input type="file" id="chart-upload" accept="image/*" style="display: none;">
+            <button id="analyze-chart">Analyze Chart</button>
+            <div id="chart-result"></div>
+        </div>
+        <div id="tools" class="tab-content">
+            <h2>Pip Calculator</h2>
+            <input type="number" id="pip-value" placeholder="Pip Value">
+            <input type="number" id="lot-size" placeholder="Lot Size">
+            <button id="calc-pip">Calculate</button>
+            <div id="pip-result"></div>
+            <h2>Risk-Reward Calculator</h2>
+            <input type="number" id="entry-price" placeholder="Entry Price">
+            <input type="number" id="stop-loss" placeholder="Stop Loss">
+            <input type="number" id="take-profit" placeholder="Take Profit">
+            <button id="calc-rr">Calculate</button>
+            <div id="rr-result"></div>
+            <h2>Position Size Calculator</h2>
+            <input type="number" id="account-balance" placeholder="Account Balance">
+            <input type="number" id="risk-percent" placeholder="Risk %">
+            <input type="number" id="stop-pips" placeholder="Stop Loss in Pips">
+            <button id="calc-pos">Calculate</button>
+            <div id="pos-result"></div>
+        </div>
+        <div id="strategy" class="tab-content">
+            <select id="asset-type">
+                <option value="forex">Forex</option>
+                <option value="crypto">Crypto</option>
+            </select>
+            <input type="text" id="pair-coin" placeholder="Pair/Coin">
+            <select id="timeframe">
+                <option value="1m">1 Minute</option>
+                <option value="5m">5 Minutes</option>
+                <option value="15m">15 Minutes</option>
+                <option value="1h">1 Hour</option>
+                <option value="4h">4 Hours</option>
+                <option value="1d">Daily</option>
+            </select>
+            <select id="risk-level">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <select id="trading-style">
+                <option value="scalping">Scalping</option>
+                <option value="day">Day Trading</option>
+                <option value="swing">Swing Trading</option>
+            </select>
+            <button id="generate-strategy">Generate Strategy</button>
+            <div id="strategy-result"></div>
+        </div>
+        <div id="learn" class="tab-content">
+            <input type="text" id="search-query" placeholder="Search topics...">
+            <button id="search-learn">Search</button>
+            <div id="learn-results"></div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
