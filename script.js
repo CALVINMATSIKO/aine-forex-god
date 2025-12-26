@@ -39,16 +39,13 @@ document.getElementById('send-chat').addEventListener('click', async () => {
             },
             body: JSON.stringify({
                 inputs: {
-                    messages: [
-                        { role: 'system', content: 'You are Aine, a Forex and Crypto educational AI. Provide educational responses only. Always include market bias, indicator explanation, strategy idea, and risk disclaimer.' },
-                        { role: 'user', content: userMessage }
-                    ]
+                    prompt: 'You are Aine, a Forex and Crypto educational AI. Provide educational responses only. Always include market bias, indicator explanation, strategy idea, and risk disclaimer.\n\nUser: ' + userMessage
                 }
             })
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const aiMessage = data.choices ? data.choices[0].message.content : data.output.choices[0].message.content;
+        const aiMessage = data.output;
         messages.innerHTML += `<div>AI: ${aiMessage}</div>`;
     } catch (error) {
         messages.innerHTML += `<div>Error: ${error.message}</div>`;
@@ -108,16 +105,13 @@ document.getElementById('generate-strategy').addEventListener('click', async () 
             },
             body: JSON.stringify({
                 inputs: {
-                    messages: [
-                        { role: 'system', content: 'Generate educational trading strategies only.' },
-                        { role: 'user', content: prompt }
-                    ]
+                    prompt: 'Generate educational trading strategies only.\n\n' + prompt
                 }
             })
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const strategy = data.output.choices[0].message.content;
+        const strategy = data.output;
         document.getElementById('strategy-result').innerHTML = strategy;
         sessionStorage.setItem('lastStrategy', strategy);
     } catch (error) {
@@ -156,20 +150,17 @@ document.getElementById('search-learn').addEventListener('click', async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                'apikey': API_KEY
             },
             body: JSON.stringify({
                 inputs: {
-                    messages: [
-                        { role: 'system', content: 'Provide educational content on Forex and Crypto topics.' },
-                        { role: 'user', content: `Explain: ${query}` }
-                    ]
+                    prompt: 'Provide educational content on Forex and Crypto topics.\n\nExplain: ' + query
                 }
             })
         });
         if (!contentResponse.ok) throw new Error(`HTTP ${contentResponse.status}`);
         const contentData = await contentResponse.json();
-        const content = contentData.output.choices[0].message.content;
+        const content = contentData.output;
         document.getElementById('learn-results').innerHTML = content;
     } catch (error) {
         document.getElementById('learn-results').textContent = `Error: ${error.message}`;
@@ -207,20 +198,17 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                'apikey': API_KEY
             },
             body: JSON.stringify({
                 inputs: {
-                    messages: [
-                        { role: 'system', content: 'Analyze the chart based on extracted text for trend direction, support & resistance, chart patterns, market structure. Provide educational text-based explanation.' },
-                        { role: 'user', content: `Analyze this chart data: ${extractedText}` }
-                    ]
+                    prompt: 'Analyze the chart based on extracted text for trend direction, support & resistance, chart patterns, market structure. Provide educational text-based explanation.\n\nAnalyze this chart data: ' + extractedText
                 }
             })
         });
         if (!response.ok) throw new Error(`AI HTTP ${response.status}`);
         const data = await response.json();
-        const analysis = data.output.choices[0].message.content;
+        const analysis = data.output;
         document.getElementById('chart-result').innerHTML = analysis;
 
         // Generate illustrative image
@@ -228,7 +216,7 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                'apikey': API_KEY
             },
             body: JSON.stringify({
                 inputs: {
