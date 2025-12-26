@@ -43,7 +43,7 @@ document.getElementById('send-chat').addEventListener('click', async () => {
             body: JSON.stringify({
                 model: 'llama3-8b-8192',
                 messages: [
-                    { role: 'system', content: 'You are Aine, a Forex and Crypto educational AI. Provide educational responses only. Always include market bias, indicator explanation, strategy idea, and risk disclaimer.' },
+                    { role: 'system', content: 'You are Aine, a Forex and Crypto educational AI for complete beginners. Assume the user knows nothing about trading. Explain every term in simple words. Use analogies. Avoid jargon or explain it. Provide clear, step-by-step guidance on what to do next. Teach before suggesting. Always end with: This is not financial advice. This is only to help you learn.' },
                     { role: 'user', content: userMessage }
                 ]
             })
@@ -113,7 +113,7 @@ document.getElementById('generate-strategy').addEventListener('click', async () 
             body: JSON.stringify({
                 model: 'llama3-8b-8192',
                 messages: [
-                    { role: 'system', content: 'Generate educational trading strategies only.' },
+                    { role: 'system', content: 'Generate educational trading strategies for complete beginners. Explain every step in simple words. Include why each step exists. Frame as examples, not instructions. Advise to skip trading if not understood. End with risk disclaimer.' },
                     { role: 'user', content: prompt }
                 ]
             })
@@ -167,7 +167,7 @@ document.getElementById('search-learn').addEventListener('click', async () => {
             body: JSON.stringify({
                 model: 'llama3-8b-8192',
                 messages: [
-                    { role: 'system', content: 'Provide educational content on Forex and Crypto topics.' },
+                    { role: 'system', content: 'Provide educational content on Forex and Crypto topics for complete beginners. Explain everything in simple words. Use analogies. Avoid jargon or define it.' },
                     { role: 'user', content: `Explain: ${query}` }
                 ]
             })
@@ -220,7 +220,7 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
                 body: JSON.stringify({
                     model: 'llama3-8b-8192',
                     messages: [
-                        { role: 'system', content: 'Analyze the chart based on extracted text for trend direction, support & resistance, chart patterns, market structure. Provide educational text-based explanation.' },
+                        { role: 'system', content: 'Analyze the chart for complete beginners. Follow this strict structure: 1. What You’re Looking At (simple explanation). 2. What Price Is Doing (up/down/sideways). 3. Why This Is Happening (simple reason). 4. What You Should Do Next (clear beginner guidance). 5. Example Trade Idea (optional, educational only). 6. Risk Reminder (not financial advice).' },
                         { role: 'user', content: `Analyze this chart data: ${extractedText}` }
                     ]
                 })
