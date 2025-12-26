@@ -235,29 +235,8 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
             document.getElementById('chart-result').innerHTML = mockAnalysis;
         }
 
-        // Generate illustrative image
-        try {
-            const imageResponse = await fetch(`${BYTEZ_BASE_URL}/stabilityai/stable-diffusion-xl-base-1.0/run`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': API_KEY
-                },
-                body: JSON.stringify({
-                    inputs: {
-                        prompt: `Educational illustration of a Forex chart. AI-generated.`,
-                        negative_prompt: 'realistic, photo'
-                    }
-                })
-            });
-            if (!imageResponse.ok) throw new Error(`Image HTTP ${imageResponse.status}`);
-            const imageData = await imageResponse.json();
-            const imageUrl = imageData.output.images[0]; // Assuming base64
-            document.getElementById('chart-result').innerHTML += `<img src="data:image/png;base64,${imageUrl}" alt="AI-generated illustration" style="max-width:100%;">`;
-        } catch (imageError) {
-            // Fallback no image
-            document.getElementById('chart-result').innerHTML += `<p>(AI-generated illustration not available)</p>`;
-        }
+        // AI-generated illustration not implemented (Bytez image generation failed)
+        document.getElementById('chart-result').innerHTML += `<p>(AI-generated illustration feature pending)</p>`;
     } catch (error) {
         document.getElementById('chart-result').textContent = `Error: ${error.message}`;
     }
