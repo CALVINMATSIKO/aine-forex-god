@@ -1,5 +1,8 @@
-// Bytez API key
-const API_KEY = '4cb461761d3ec8eca43b3bc9a5c197f0';
+// Groq API key
+const GROQ_API_KEY = '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';
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+// Bytez API key for embeddings and images
+const BYTEZ_API_KEY = '4cb461761d3ec8eca43b3bc9a5c197f0';
 const BYTEZ_BASE_URL = 'https://api.bytez.com/models';
 // OCR Space API key
 const OCR_API_KEY = 'K83174044688957';
@@ -31,21 +34,23 @@ document.getElementById('send-chat').addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch(`${BYTEZ_BASE_URL}/Qwen/Qwen2.5-0.5B/run`, {
+        const response = await fetch(GROQ_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'apikey': API_KEY
+                'Authorization': `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                inputs: {
-                    prompt: 'You are Aine, a Forex and Crypto educational AI. Provide educational responses only. Always include market bias, indicator explanation, strategy idea, and risk disclaimer.\n\nUser: ' + userMessage
-                }
+                model: 'llama3-8b-8192',
+                messages: [
+                    { role: 'system', content: 'You are Aine, a Forex and Crypto educational AI. Provide educational responses only. Always include market bias, indicator explanation, strategy idea, and risk disclaimer.' },
+                    { role: 'user', content: userMessage }
+                ]
             })
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const aiMessage = data.output;
+        const aiMessage = data.choices[0].message.content;
         messages.innerHTML += `<div>AI: ${aiMessage}</div>`;
     } catch (error) {
         // Fallback mock response for demo
@@ -99,21 +104,23 @@ document.getElementById('generate-strategy').addEventListener('click', async () 
     }
 
     try {
-        const response = await fetch(`${BYTEZ_BASE_URL}/Qwen/Qwen2.5-0.5B/run`, {
+        const response = await fetch(GROQ_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'apikey': API_KEY
+                'Authorization': `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                inputs: {
-                    prompt: 'Generate educational trading strategies only.\n\n' + prompt
-                }
+                model: 'llama3-8b-8192',
+                messages: [
+                    { role: 'system', content: 'Generate educational trading strategies only.' },
+                    { role: 'user', content: prompt }
+                ]
             })
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const strategy = data.output;
+        const strategy = data.choices[0].message.content;
         document.getElementById('strategy-result').innerHTML = strategy;
         sessionStorage.setItem('lastStrategy', strategy);
     } catch (error) {
@@ -150,22 +157,24 @@ document.getElementById('search-learn').addEventListener('click', async () => {
         const embedData = await embedResponse.json();
         const embedding = embedData.output.embedding;
 
-        // For simplicity, generate content based on query using Qwen
-        const contentResponse = await fetch(`${BYTEZ_BASE_URL}/Qwen/Qwen2.5-0.5B/run`, {
+        // For simplicity, generate content based on query using Groq
+        const contentResponse = await fetch(GROQ_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'apikey': API_KEY
+                'Authorization': `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                inputs: {
-                    prompt: 'Provide educational content on Forex and Crypto topics.\n\nExplain: ' + query
-                }
+                model: 'llama3-8b-8192',
+                messages: [
+                    { role: 'system', content: 'Provide educational content on Forex and Crypto topics.' },
+                    { role: 'user', content: `Explain: ${query}` }
+                ]
             })
         });
         if (!contentResponse.ok) throw new Error(`HTTP ${contentResponse.status}`);
         const contentData = await contentResponse.json();
-        const content = contentData.output;
+        const content = contentData.choices[0].message.content;
         document.getElementById('learn-results').innerHTML = content;
     } catch (error) {
         // Fallback mock
@@ -202,21 +211,23 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
 
         // Then, analyze with AI
         try {
-            const response = await fetch(`${BYTEZ_BASE_URL}/google/gemma-2-2b-it/run`, {
+            const response = await fetch(GROQ_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'apikey': API_KEY
+                    'Authorization': `Bearer ${GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    inputs: {
-                        prompt: 'Analyze the chart based on extracted text for trend direction, support & resistance, chart patterns, market structure. Provide educational text-based explanation.\n\nAnalyze this chart data: ' + extractedText
-                    }
+                    model: 'llama3-8b-8192',
+                    messages: [
+                        { role: 'system', content: 'Analyze the chart based on extracted text for trend direction, support & resistance, chart patterns, market structure. Provide educational text-based explanation.' },
+                        { role: 'user', content: `Analyze this chart data: ${extractedText}` }
+                    ]
                 })
             });
             if (!response.ok) throw new Error(`AI HTTP ${response.status}`);
             const data = await response.json();
-            const analysis = data.output;
+            const analysis = data.choices[0].message.content;
             document.getElementById('chart-result').innerHTML = analysis;
         } catch (aiError) {
             // Fallback mock analysis
