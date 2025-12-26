@@ -1,7 +1,10 @@
 // Groq API key
 const GROQ_API_KEY = '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';
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-// Bytez API key for embeddings and images
+// Gemini API key for images
+const GEMINI_API_KEY = 'AIzaSyCyfkiG3l0gW6pzj1xayEoGGk9UCUrfGW8';
+const GEMINI_IMAGE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict';
+// Bytez API key for embeddings
 const BYTEZ_API_KEY = '4cb461761d3ec8eca43b3bc9a5c197f0';
 const BYTEZ_BASE_URL = 'https://api.bytez.com/models';
 // OCR Space API key
@@ -235,8 +238,27 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
             document.getElementById('chart-result').innerHTML = mockAnalysis;
         }
 
-        // AI-generated illustration not implemented (Bytez image generation failed)
-        document.getElementById('chart-result').innerHTML += `<p>(AI-generated illustration feature pending)</p>`;
+        // Generate illustrative image using Gemini
+        try {
+            const imageResponse = await fetch(`${GEMINI_IMAGE_URL}?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt: {
+                        text: `Educational illustration of a Forex chart. AI-generated.`
+                    }
+                })
+            });
+            if (!imageResponse.ok) throw new Error(`Image HTTP ${imageResponse.status}`);
+            const imageData = await imageResponse.json();
+            const imageUrl = imageData.predictions[0].bytesBase64Encoded; // Assuming base64
+            document.getElementById('chart-result').innerHTML += `<img src="data:image/png;base64,${imageUrl}" alt="AI-generated illustration" style="max-width:100%;">`;
+        } catch (imageError) {
+            // Fallback no image
+            document.getElementById('chart-result').innerHTML += `<p>(AI-generated illustration not available)</p>`;
+        }
     } catch (error) {
         document.getElementById('chart-result').textContent = `Error: ${error.message}`;
     }
