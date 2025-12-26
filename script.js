@@ -221,8 +221,29 @@ document.getElementById('analyze-chart').addEventListener('click', async () => {
             document.getElementById('chart-result').innerHTML = mockAnalysis;
         }
 
-        // AI-generated illustration not available due to API limitations
-        document.getElementById('chart-result').innerHTML += `<p>Note: AI-generated illustrations are not supported in this version.</p>`;
+        // Generate illustrative image using Gemini
+        try {
+            const imageResponse = await fetch(`${GEMINI_IMAGE_URL}?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Generate an educational illustration of a Forex chart. Make it simple and clear.`
+                        }]
+                    }]
+                })
+            });
+            if (!imageResponse.ok) throw new Error(`Image HTTP ${imageResponse.status}`);
+            const imageData = await imageResponse.json();
+            const imageUrl = imageData.candidates[0].content.parts[0].inlineData.data;
+            document.getElementById('chart-result').innerHTML += `<img src="data:image/png;base64,${imageUrl}" alt="AI-generated illustration" style="max-width:100%;">`;
+        } catch (imageError) {
+            // Fallback no image
+            document.getElementById('chart-result').innerHTML += `<p>(AI-generated illustration not available)</p>`;
+        }
     } catch (error) {
         document.getElementById('chart-result').textContent = `Error: ${error.message}`;
     }
